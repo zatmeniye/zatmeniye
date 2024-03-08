@@ -1,4 +1,5 @@
-import { IProp, ISlot, IType, IWidget } from "@/types";
+import { IContext, IProp, ISlot, IType, IWidget } from "@/types";
+import { isRef } from "vue";
 
 export const createWidget = (
 	type: IType,
@@ -23,13 +24,29 @@ export const createProp = (
 	name: string,
 	type: string,
 	value: string,
+	fromVariable: boolean = false,
 ): IProp => ({
 	name,
 	type,
 	value,
+	fromVariable,
 });
 
 export const createSlot = (name: string, widgets: IWidget[]): ISlot => ({
 	name,
 	widgets,
 });
+
+export const getVariable = (ctx: IContext, name: string): any => {
+	if (name in ctx.namespace) {
+		return isRef(ctx.namespace[name])
+			? ctx.namespace[name].value
+			: ctx.namespace[name];
+	}
+
+	if (ctx.parent === null) {
+		return null;
+	}
+
+	return getVariable(ctx.parent, name);
+};

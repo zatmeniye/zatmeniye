@@ -1,10 +1,8 @@
 import { createProp, createSlot, createType, createWidget } from "@/lib";
-// noinspection ES6PreferShortImport
-import { userList } from "../externalData/userList";
 
 export const userTable = createWidget(
 	createType("DataTable"),
-	[createProp("value", "array", JSON.stringify(userList))],
+	[createProp("value", "array", "userList", true)],
 	[
 		createSlot("default", [
 			createWidget(createType("Column", true), [

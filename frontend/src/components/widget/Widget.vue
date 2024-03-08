@@ -1,19 +1,29 @@
 <script lang="ts" setup>
-import { IProp, IWidget } from "@/types";
+import { IContext, IProp, IWidget } from "@/types";
 import { uiComponents } from "@/ui";
+import { getVariable } from "@/lib";
+import { ref } from "vue";
 
-defineProps<{ widget: IWidget }>();
+const props = defineProps<{ ctx?: IContext; widget: IWidget }>();
+
+const updatedCtx = ref<IContext>({ namespace: {}, parent: props.ctx ?? null });
 
 const getComponent = (widget: IWidget) => {
 	return uiComponents[widget.type.name] ?? null;
 };
 
 const getProps = (widget: IWidget) => {
-	const props: { [key: string]: any } = {};
+	const result: { [key: string]: any } = {};
 
-	widget.props?.forEach((prop) => (props[prop.name] = castProp(prop)));
+	widget.props?.forEach((prop) => {
+		if (prop.fromVariable) {
+			result[prop.name] = getVariable(updatedCtx.value, prop.value);
+			return;
+		}
+		result[prop.name] = castProp(prop);
+	});
 
-	return props;
+	return result;
 };
 
 const castProp = (prop: IProp) => {
@@ -42,7 +52,7 @@ const castProp = (prop: IProp) => {
 		<template
 			v-for="slot in widget.slots"
 			:key="slot.name"
-			v-slot:[slot.name]
+			v-slot:[slot.name]="slotProps"
 		>
 			<template
 				v-for="slotWidget in slot.widgets"
@@ -56,9 +66,10 @@ const castProp = (prop: IProp) => {
 					<template
 						v-for="slot in slotWidget.slots"
 						:key="slot.name"
-						v-slot:[slot.name]
+						v-slot:[slot.name]="slotProps"
 					>
 						<Widget
+							:ctx="{ namespace: { ...slotProps }, parent: updatedCtx }"
 							v-for="slotWidget in slot.widgets"
 							:key="slotWidget.id"
 							:widget="slotWidget"
@@ -67,6 +78,7 @@ const castProp = (prop: IProp) => {
 				</component>
 				<Widget
 					v-else
+					:ctx="{ namespace: { ...slotProps }, parent: updatedCtx }"
 					:widget="slotWidget"
 				/>
 			</template>
