@@ -13,7 +13,7 @@ import InputNumber from "primevue/inputnumber";
 import InputText from "primevue/inputtext";
 import Dialog from "primevue/dialog";
 
-export const uiComponents = {
+export const uiComponents: { [key: string]: any } = {
 	Button,
 	DataTable,
 	Column,
