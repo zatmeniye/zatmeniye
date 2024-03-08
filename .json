@@ -1,0 +1,246 @@
+{
+  "id": 1364451793863855,
+  "type": { "name": "TabView", "dataTransfer": false },
+  "props": null,
+  "slots": [
+    {
+      "name": "default",
+      "widgets": [
+        {
+          "id": 6992997627756747,
+          "type": { "name": "TabPanel", "dataTransfer": true },
+          "props": [
+            {
+              "name": "header",
+              "type": "string",
+              "value": "пользователи",
+              "fromVariable": false
+            }
+          ],
+          "slots": [
+            {
+              "name": "default",
+              "widgets": [
+                {
+                  "id": 7495313781691697,
+                  "type": { "name": "DataTable", "dataTransfer": false },
+                  "props": [
+                    {
+                      "name": "value",
+                      "type": "array",
+                      "value": "userList",
+                      "fromVariable": true
+                    }
+                  ],
+                  "slots": [
+                    {
+                      "name": "default",
+                      "widgets": [
+                        {
+                          "id": 4438825657377444,
+                          "type": { "name": "Column", "dataTransfer": true },
+                          "props": [
+                            {
+                              "name": "field",
+                              "type": "string",
+                              "value": "name",
+                              "fromVariable": false
+                            },
+                            {
+                              "name": "header",
+                              "type": "string",
+                              "value": "имя",
+                              "fromVariable": false
+                            }
+                          ],
+                          "slots": null
+                        },
+                        {
+                          "id": 730533644211642,
+                          "type": { "name": "Column", "dataTransfer": true },
+                          "props": [
+                            {
+                              "name": "field",
+                              "type": "string",
+                              "value": "address.city",
+                              "fromVariable": false
+                            },
+                            {
+                              "name": "header",
+                              "type": "string",
+                              "value": "город",
+                              "fromVariable": false
+                            }
+                          ],
+                          "slots": null
+                        },
+                        {
+                          "id": 7395490314970137,
+                          "type": { "name": "Column", "dataTransfer": true },
+                          "props": [
+                            {
+                              "name": "header",
+                              "type": "string",
+                              "value": "действия",
+                              "fromVariable": false
+                            }
+                          ],
+                          "slots": [
+                            {
+                              "name": "body",
+                              "widgets": [
+                                {
+                                  "id": 1055218833547256,
+                                  "type": {
+                                    "name": "Button",
+                                    "dataTransfer": false
+                                  },
+                                  "props": [
+                                    {
+                                      "name": "label",
+                                      "type": "string",
+                                      "value": "удалить",
+                                      "fromVariable": false
+                                    },
+                                    {
+                                      "name": "severity",
+                                      "type": "string",
+                                      "value": "danger",
+                                      "fromVariable": false
+                                    }
+                                  ],
+                                  "slots": null
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 4440675483122306,
+          "type": { "name": "TabPanel", "dataTransfer": true },
+          "props": [
+            {
+              "name": "header",
+              "type": "string",
+              "value": "посты",
+              "fromVariable": false
+            }
+          ],
+          "slots": [
+            {
+              "name": "default",
+              "widgets": [
+                {
+                  "id": 7495313781691697,
+                  "type": { "name": "DataTable", "dataTransfer": false },
+                  "props": [
+                    {
+                      "name": "value",
+                      "type": "array",
+                      "value": "userList",
+                      "fromVariable": true
+                    }
+                  ],
+                  "slots": [
+                    {
+                      "name": "default",
+                      "widgets": [
+                        {
+                          "id": 4438825657377444,
+                          "type": { "name": "Column", "dataTransfer": true },
+                          "props": [
+                            {
+                              "name": "field",
+                              "type": "string",
+                              "value": "name",
+                              "fromVariable": false
+                            },
+                            {
+                              "name": "header",
+                              "type": "string",
+                              "value": "имя",
+                              "fromVariable": false
+                            }
+                          ],
+                          "slots": null
+                        },
+                        {
+                          "id": 730533644211642,
+                          "type": { "name": "Column", "dataTransfer": true },
+                          "props": [
+                            {
+                              "name": "field",
+                              "type": "string",
+                              "value": "address.city",
+                              "fromVariable": false
+                            },
+                            {
+                              "name": "header",
+                              "type": "string",
+                              "value": "город",
+                              "fromVariable": false
+                            }
+                          ],
+                          "slots": null
+                        },
+                        {
+                          "id": 7395490314970137,
+                          "type": { "name": "Column", "dataTransfer": true },
+                          "props": [
+                            {
+                              "name": "header",
+                              "type": "string",
+                              "value": "действия",
+                              "fromVariable": false
+                            }
+                          ],
+                          "slots": [
+                            {
+                              "name": "body",
+                              "widgets": [
+                                {
+                                  "id": 1055218833547256,
+                                  "type": {
+                                    "name": "Button",
+                                    "dataTransfer": false
+                                  },
+                                  "props": [
+                                    {
+                                      "name": "label",
+                                      "type": "string",
+                                      "value": "удалить",
+                                      "fromVariable": false
+                                    },
+                                    {
+                                      "name": "severity",
+                                      "type": "string",
+                                      "value": "danger",
+                                      "fromVariable": false
+                                    }
+                                  ],
+                                  "slots": null
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -5,13 +5,13 @@ import Column from "primevue/column";
 import Tree from "primevue/tree";
 import Card from "primevue/card";
 import Panel from "primevue/panel";
-import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
 import Checkbox from "primevue/checkbox";
 import Dropdown from "primevue/dropdown";
 import InputNumber from "primevue/inputnumber";
 import InputText from "primevue/inputtext";
 import Dialog from "primevue/dialog";
+import { TabView } from "./wrappers/primevue";
 
 export const uiComponents: { [key: string]: any } = {
 	Button,

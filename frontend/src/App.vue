@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import Widget from "@/components/widget/Widget.vue";
-import { userTable, userList } from "@/data";
+import { tabs, userList, postList } from "@/data";
 import { IContext } from "@/types";
 
 const ctx: IContext = {
-	namespace: { userList },
+	namespace: { userList, postList },
 	parent: null,
 };
 </script>
 
 <template>
-	<div class="flex items-center justify-center h-screen">
+	<div class="flex items-center justify-center min-h-screen">
 		<Widget
 			:ctx="ctx"
-			:widget="userTable"
+			:widget="tabs"
 		/>
 	</div>
 </template>
