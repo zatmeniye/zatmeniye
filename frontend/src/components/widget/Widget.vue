@@ -12,6 +12,23 @@ const getComponent = (widget: IWidget) => {
 	return uiComponents[widget.type.name] ?? null;
 };
 
+const getEmits = (widget: IWidget) => {
+	const result: { [key: string]: (event: any) => any } = {};
+
+	widget.emits?.forEach((emit) => {
+		result[emit.name] = (event: any) => {
+			emit.handlers.forEach((handler) => {
+				const fn = getVariable(updatedCtx.value, handler);
+				if (typeof fn === "function") {
+					fn(event);
+				}
+			});
+		};
+	});
+
+	return result;
+};
+
 const getProps = (widget: IWidget) => {
 	const result: { [key: string]: any } = {};
 
@@ -48,6 +65,7 @@ const castProp = (prop: IProp) => {
 	<component
 		:is="getComponent(widget)"
 		v-bind="getProps(widget)"
+		v-on="getEmits(widget)"
 	>
 		<template
 			v-for="slot in widget.slots"

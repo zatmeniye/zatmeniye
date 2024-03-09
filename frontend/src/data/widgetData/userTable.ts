@@ -1,4 +1,10 @@
-import { createProp, createSlot, createType, createWidget } from "@/lib";
+import {
+	createEmit,
+	createProp,
+	createSlot,
+	createType,
+	createWidget,
+} from "@/lib";
 
 export const userTable = createWidget(
 	createType("DataTable"),
@@ -18,10 +24,15 @@ export const userTable = createWidget(
 				[createProp("header", "string", "действия")],
 				[
 					createSlot("body", [
-						createWidget(createType("Button"), [
-							createProp("label", "string", "удалить"),
-							createProp("severity", "string", "danger"),
-						]),
+						createWidget(
+							createType("Button"),
+							[
+								createProp("label", "string", "удалить"),
+								createProp("severity", "string", "danger"),
+							],
+							null,
+							[createEmit("click", ["log"])],
+						),
 					]),
 				],
 			),

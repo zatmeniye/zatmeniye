@@ -3,6 +3,7 @@ export interface IWidget {
 	type: IType;
 	props: IProp[] | null;
 	slots: ISlot[] | null;
+	emits: IEmit[] | null;
 }
 
 export interface IType {
@@ -20,6 +21,11 @@ export interface IProp {
 export interface ISlot {
 	name: string;
 	widgets: IWidget[];
+}
+
+export interface IEmit {
+	name: string;
+	handlers: string[];
 }
 
 export interface IContext {

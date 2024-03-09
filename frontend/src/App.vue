@@ -4,7 +4,13 @@ import { tabs, userList, postList } from "@/data";
 import { IContext } from "@/types";
 
 const ctx: IContext = {
-	namespace: { userList, postList },
+	namespace: {
+		userList,
+		postList,
+		log: (...args: any) => {
+			console.log(...args);
+		},
+	},
 	parent: null,
 };
 </script>

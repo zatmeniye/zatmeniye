@@ -1,6 +1,7 @@
 import { createProp, createSlot, createType, createWidget } from "@/lib";
 // noinspection ES6PreferShortImport
 import { userTable } from "./userTable";
+// noinspection ES6PreferShortImport
 import { postTable } from "./postTable";
 
 export const tabs = createWidget(createType("TabView"), null, [

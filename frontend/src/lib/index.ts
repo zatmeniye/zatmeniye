@@ -1,15 +1,17 @@
-import { IContext, IProp, ISlot, IType, IWidget } from "@/types";
+import { IContext, IEmit, IProp, ISlot, IType, IWidget } from "@/types";
 import { isRef } from "vue";
 
 export const createWidget = (
 	type: IType,
 	props: IProp[] | null = null,
 	slots: ISlot[] | null = null,
+	emits: IEmit[] | null = null,
 ): IWidget => ({
 	id: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
 	type,
 	props,
 	slots,
+	emits,
 });
 
 export const createType = (
@@ -35,6 +37,11 @@ export const createProp = (
 export const createSlot = (name: string, widgets: IWidget[]): ISlot => ({
 	name,
 	widgets,
+});
+
+export const createEmit = (name: string, handlers: string[]): IEmit => ({
+	name,
+	handlers,
 });
 
 export const getVariable = (ctx: IContext, name: string): any => {
