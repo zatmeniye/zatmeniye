@@ -8,7 +8,7 @@ import {
 
 export const userTable = createWidget(
 	createType("DataTable"),
-	[createProp("value", "array", "userList", true)],
+	[createProp("value", "array", "data", true)],
 	[
 		createSlot("default", [
 			createWidget(createType("Column", true), [
@@ -31,11 +31,13 @@ export const userTable = createWidget(
 								createProp("severity", "string", "danger"),
 							],
 							null,
-							[createEmit("click", ["log"])],
+							[createEmit("click", ["executeProcess"])],
 						),
 					]),
 				],
 			),
 		]),
 	],
+	null,
+	["executeProcess"],
 );

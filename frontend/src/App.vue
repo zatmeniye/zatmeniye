@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import { ProcessExecutor } from "@/lib";
 import Widget from "@/components/widget/Widget.vue";
-import { tabs, userList, postList } from "@/data";
+import { tabs, postList } from "@/data";
 import { IContext } from "@/types";
+import { provide } from "vue";
 
 const ctx: IContext = {
 	namespace: {
-		userList,
 		postList,
 		log: (...args: any) => {
 			console.log(...args);
@@ -13,6 +14,8 @@ const ctx: IContext = {
 	},
 	parent: null,
 };
+
+provide("processExecutor", new ProcessExecutor());
 </script>
 
 <template>

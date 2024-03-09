@@ -4,6 +4,7 @@ export interface IWidget {
 	props: IProp[] | null;
 	slots: ISlot[] | null;
 	emits: IEmit[] | null;
+	initHandlers: string[] | null;
 }
 
 export interface IType {
