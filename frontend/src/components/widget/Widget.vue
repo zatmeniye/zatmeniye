@@ -1,39 +1,48 @@
 <script lang="ts" setup>
-import { IContext, IProp, IWidget } from "@/types";
+import { cast, useContext, IContext } from "@/lib";
+import { IEmit, IProp, IWidget } from "@/types";
 import { uiComponents } from "@/ui";
-import { getVariable, ProcessExecutor } from "@/lib";
-import { inject, ref } from "vue";
+import { ref } from "vue";
 
-const props = defineProps<{ ctx?: IContext; widget: IWidget }>();
+const props = defineProps<{ ctx: IContext; widget: IWidget }>();
 
-const processExecutor = inject<ProcessExecutor | null>("processExecutor", null);
+const { ctx: updatedCtx, getVar, setVar, getVarSet } = useContext(props.ctx);
 
-const updatedCtx = ref<IContext>({
-	namespace: {
-		async executeProcess(pid: number) {
-			if (processExecutor) {
-				const data = await processExecutor.execute(pid);
-				if (data) {
-					updatedCtx.value.namespace = {
-						...updatedCtx.value.namespace,
-						data: data,
-					};
-				}
-			}
-		},
-	},
-	parent: props.ctx ?? null,
+setVar("setVar", ({ name, value }: any) => {
+	setVar(name, ref(value));
 });
+
+const getProps = (props: IProp[] | null) => {
+	const result: { [key: string]: unknown } = {};
+
+	props?.forEach((prop) => {
+		if (prop.fromVar) {
+			result[prop.name] = getVar(prop.value);
+			if (prop.twoWay) {
+				result[`onUpdate:${prop.name}`] = (event: any) => {
+					getVarSet(prop.value)(event);
+				};
+			}
+			return;
+		}
+		result[prop.name] = cast(prop.type, prop.value);
+	});
+
+	return result;
+};
 
 if (props.widget.initHandlers) {
 	props.widget.initHandlers.forEach((handler) => {
-		const fn = getVariable(updatedCtx.value, handler);
-		if (typeof fn === "function") {
-			if (fn[Symbol.toStringTag] === "AsyncFunction") {
-				fn();
-				return;
-			}
-			fn();
+		const callback = getVar(handler.name);
+		if (callback instanceof (async () => {}).constructor) {
+			(<any>callback)({
+				...getProps(handler.props),
+				ctx: updatedCtx,
+			}).then((data: unknown) => {
+				setVar("data", data);
+			});
+		} else if (typeof callback === "function") {
+			setVar("data", callback({ ...getProps(handler.props), ctx: updatedCtx }));
 		}
 	});
 }
@@ -42,15 +51,24 @@ const getComponent = (widget: IWidget) => {
 	return uiComponents[widget.type.name] ?? null;
 };
 
-const getEmits = (widget: IWidget) => {
-	const result: { [key: string]: (event: any) => any } = {};
+const getEmits = (emits: IEmit[] | null) => {
+	const result: { [key: string]: () => void } = {};
 
-	widget.emits?.forEach((emit) => {
-		result[emit.name] = (event: any) => {
+	emits?.forEach((emit) => {
+		result[emit.name] = () => {
 			emit.handlers.forEach((handler) => {
-				const fn = getVariable(updatedCtx.value, handler);
-				if (typeof fn === "function") {
-					fn(event);
+				const callback = getVar(handler.name);
+				if (callback instanceof (async () => {}).constructor) {
+					(<any>callback)({ ...getProps(handler.props), ctx: updatedCtx }).then(
+						(data: unknown) => {
+							setVar("data", data);
+						},
+					);
+				} else if (typeof callback === "function") {
+					setVar(
+						"data",
+						callback({ ...getProps(handler.props), ctx: updatedCtx }),
+					);
 				}
 			});
 		};
@@ -58,45 +76,13 @@ const getEmits = (widget: IWidget) => {
 
 	return result;
 };
-
-const dict: { [key: string]: { nullValue: any; handler: any } } = {
-	boolean: { nullValue: false, handler: Boolean },
-	number: { nullValue: 0, handler: Number },
-	bigint: { nullValue: 0n, handler: BigInt },
-	string: { nullValue: "", handler: String },
-	array: { nullValue: [], handler: JSON.parse },
-	object: { nullValue: {}, handler: JSON.parse },
-};
-
-const getProps = (widget: IWidget) => {
-	const result: { [key: string]: any } = {};
-
-	widget.props?.forEach((prop) => {
-		if (prop.fromVariable) {
-			result[prop.name] =
-				getVariable(updatedCtx.value, prop.value) ?? dict[prop.type].nullValue;
-			return;
-		}
-		result[prop.name] = castProp(prop);
-	});
-
-	return result;
-};
-
-const castProp = (prop: IProp) => {
-	try {
-		return dict[prop.type]?.handler(prop.value);
-	} catch {
-		return dict[prop.type].nullValue;
-	}
-};
 </script>
 
 <template>
 	<component
 		:is="getComponent(widget)"
-		v-bind="getProps(widget)"
-		v-on="getEmits(widget)"
+		v-bind="getProps(widget.props)"
+		v-on="getEmits(widget.emits)"
 	>
 		<template
 			v-for="slot in widget.slots"
@@ -104,31 +90,31 @@ const castProp = (prop: IProp) => {
 			v-slot:[slot.name]="slotProps"
 		>
 			<template
-				v-for="slotWidget in slot.widgets"
-				:key="slotWidget.id"
+				v-for="widget in slot.widgets"
+				:key="widget.id"
 			>
 				<component
-					v-if="slotWidget.type.dataTransfer"
-					:is="getComponent(slotWidget)"
-					v-bind="getProps(slotWidget)"
+					v-if="widget.type.dataTransfer"
+					:is="getComponent(widget)"
+					v-bind="getProps(widget.props)"
 				>
 					<template
-						v-for="slot in slotWidget.slots"
+						v-for="slot in widget.slots"
 						:key="slot.name"
 						v-slot:[slot.name]="slotProps"
 					>
 						<Widget
+							v-for="widget in slot.widgets"
 							:ctx="{ namespace: { ...slotProps }, parent: updatedCtx }"
-							v-for="slotWidget in slot.widgets"
-							:key="slotWidget.id"
-							:widget="slotWidget"
+							:key="widget.id"
+							:widget="widget"
 						/>
 					</template>
 				</component>
 				<Widget
 					v-else
 					:ctx="{ namespace: { ...slotProps }, parent: updatedCtx }"
-					:widget="slotWidget"
+					:widget="widget"
 				/>
 			</template>
 		</template>

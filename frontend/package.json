@@ -10,7 +10,9 @@
 	},
 	"dependencies": {
 		"@tanstack/vue-query": "^5.25.0",
+		"@types/lodash": "^4.14.202",
 		"axios": "^1.6.7",
+		"lodash": "^4.17.21",
 		"primevue": "^3.49.1",
 		"vue": "^3.4.19"
 	},

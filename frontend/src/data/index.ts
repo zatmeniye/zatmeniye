@@ -1,5 +1,4 @@
-export { userList } from "./externalData/userList";
-export { postList } from "./externalData/postList";
-export { userTable } from "./widgetData/userTable";
-export { postTable } from "./widgetData/postTable";
-export { tabs } from "./widgetData/tabs";
+export { table } from "./widget/table";
+export { tabs } from "./widget/tabs";
+export { inputText } from "./widget/inputText";
+export { card } from "./widget/card";

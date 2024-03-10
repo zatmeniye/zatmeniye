@@ -1,28 +1,25 @@
-<script setup lang="ts">
-import { ProcessExecutor } from "@/lib";
+<script lang="ts" setup>
+import { useContext, useProcessor } from "@/lib";
+import { card } from "@/data";
 import Widget from "@/components/widget/Widget.vue";
-import { tabs, postList } from "@/data";
-import { IContext } from "@/types";
-import { provide } from "vue";
 
-const ctx: IContext = {
-	namespace: {
-		postList,
-		log: (...args: any) => {
-			console.log(...args);
-		},
+const processor = useProcessor();
+
+const { ctx } = useContext(null, {
+	execute: async ({ pid }: any) => {
+		return await processor.execute(pid);
 	},
-	parent: null,
-};
-
-provide("processExecutor", new ProcessExecutor());
+	invalidate: ({ pid }: any) => {
+		processor.invalidate(pid);
+	},
+});
 </script>
 
 <template>
-	<div class="flex items-center justify-center min-h-screen">
+	<div class="min-h-screen grid grid-cols-2 gap-6 p-6 items-start">
 		<Widget
 			:ctx="ctx"
-			:widget="tabs"
+			:widget="card"
 		/>
 	</div>
 </template>

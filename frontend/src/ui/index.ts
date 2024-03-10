@@ -12,6 +12,7 @@ import InputNumber from "primevue/inputnumber";
 import InputText from "primevue/inputtext";
 import Dialog from "primevue/dialog";
 import { TabView } from "./wrappers/primevue";
+import Form from "./components/form/Form.vue";
 
 export const uiComponents: { [key: string]: any } = {
 	Button,
@@ -27,6 +28,7 @@ export const uiComponents: { [key: string]: any } = {
 	InputNumber,
 	InputText,
 	Dialog,
+	Form,
 };
 
 export const register = {
